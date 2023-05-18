@@ -15,5 +15,10 @@ python mix_process.py 4x 1 0.999
 
 After this command, the process will run and finish after some loops. With hssp200, it took about 8 loops to obtain new model.
 
+# Run from certain loop. For example, we continue from loop 3
+
+touch un.do
+
+python mix_process.py 4x 3 0.999
 # Test
 We also provide some script for RELL test, AU test in test_scripts
