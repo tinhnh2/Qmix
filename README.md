@@ -7,9 +7,26 @@ unzip hssp200.zip
 
 # Set PATH to iqtree2 execute file.
 export PATH=PATH_TO_IQTREE2:$PATH
+
+We uploaded iqtree-2.2.2.1 in estimate_scripts folder. So, you can set PATH with command:
+
+export PATH=\`pwd\`:$PATH
+
 # Run script to estimate 
-Option: free-schema (4x) or gamma distribution (4m), start from step 1 and stop with correlation threshold is 0.999.\
+
 Run with command: 
+
+python mix_process.py model_type loop_id stop_threshold
+
+Options:
+
+model_type: 4m for gamma rate distribution, 4x for free-schema distribution
+
+loop_id: default is 1
+
+stop_threshold: condition for stopping estimation process, here we choose correlation score is the criteria with 0.999
+
+Example command: 
 
 python mix_process.py 4x 1 0.999
 
@@ -21,4 +38,4 @@ touch un.do
 
 python mix_process.py 4x 3 0.999
 # Test
-We also provide some script for RELL test, AU test in test_scripts
+For test script, please see in test_scripts folder.
