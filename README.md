@@ -9,6 +9,8 @@ We first demonstrate the estimation of a mixture model for a dataset of 200 HSSP
 To use Qmix please make sure that you download the IQ-TREE version 2.2.0 or later and set PATH to the execute downloaded file. For example:
 **export PATH=path_to_IQTREE:$PATH**
 
+Beside, you also need python and perl program to finish the pipeline process. 
+
 The estimation (training) then can be accomplished with just one command. The command is:
 
 **sh Qmix.sh 4x 0.95 18 /home/test/hssp200**
