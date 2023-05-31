@@ -7,6 +7,7 @@ os.environ["CURR_DIR"] = os.getcwd()
 site_rate_type = "4x"
 data_path = ""
 corr_thres = 0.95
+number_thread = 8
 def create_bjob_file(folder, loop_id):
     # Run Modelfinder on training set
     if site_rate_type == "4x":
@@ -15,18 +16,18 @@ def create_bjob_file(folder, loop_id):
 	cmd = "cp run_step3_4m.sh %s/"%(folder)
     os.system(cmd)
     if loop_id == 1:
-        cmd = 'cp Q.LG %s/Q.step3.4x.1'%(folder)
+        cmd = 'cp LG %s/Q.step3.4x.1'%(folder)
         os.system(cmd)
-        cmd = 'cp Q.LG %s/Q.step3.4x.2'%(folder)
+        cmd = 'cp LG %s/Q.step3.4x.2'%(folder)
         os.system(cmd)
-        cmd = 'cp Q.LG %s/Q.step3.4x.3'%(folder) 
+        cmd = 'cp LG %s/Q.step3.4x.3'%(folder) 
         os.system(cmd)
-        cmd = 'cp Q.LG %s/Q.step3.4x.4'%(folder)
+        cmd = 'cp LG %s/Q.step3.4x.4'%(folder)
         os.system(cmd)
     if site_rate_type == "4x":
-        cmd = 'sh run.sh %d run_step3_4x.sh'%loop_id
+        cmd = 'sh run.sh %d run_step3_4x.sh %d'%(loop_id,number_thread)
     else:
-        cmd = 'sh run.sh %d run_step3_4m.sh'%loop_id
+        cmd = 'sh run.sh %d run_step3_4m.sh %d'%(loop_id,number_thread)
     os.system(cmd)
     print(cmd)
 
@@ -67,7 +68,7 @@ def do_step5(loop_id):
     print("This is step 5")
     cmd = "mkdir -p loop%d/step5"%(loop_id)
     os.system(cmd)
-    cmd = "sh step5.sh %d"%(loop_id)
+    cmd = "sh step5.sh %d %d"%(loop_id,number_thread)
     os.system(cmd)
 
 def loop(loop_id):
@@ -96,9 +97,6 @@ def loop(loop_id):
 
 def main():
     print("Start process...: ")
-    #print("Create folder for loop 1")
-    #cmd = "mkdir -p loop1/step3; mkdir -p loop1/step4; mkdir -p loop1/step5"
-    #os.system(cmd)
 
     loop_id = 1
     exit_loop = 0
@@ -133,5 +131,6 @@ def main():
 if __name__ == '__main__':
     site_rate_type = sys.argv[1]
     corr_thres = sys.argv[2]
-    data_path = sys.argv[3]
+    data_path = sys.argv[4]
+    number_thread = int(sys.argv[3])
     main()
