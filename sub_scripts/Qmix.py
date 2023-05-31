@@ -49,11 +49,11 @@ def pearon_corr(model1, model2):
     return corr
 def do_step3(loop_id):
     print("This is step 3")
-    number_core = 4
-    cmd = "mkdir -p loop%d/step3"%(loop_id)
-    os.system(cmd)
-    cmd = "cp -rf %s loop%d/step3/data"%(data_path,loop_id)
-    os.system(cmd)
+    if loop_id == 1:
+        cmd = "mkdir -p loop%d/step3"%(loop_id)
+        os.system(cmd)
+        cmd = "cp -rf %s loop%d/step3/data"%(data_path,loop_id)
+        os.system(cmd)
     path="loop%d/step3/"%loop_id
     create_bjob_file(path,loop_id)
     
