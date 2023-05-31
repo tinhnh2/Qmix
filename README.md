@@ -11,7 +11,7 @@ To use Qmix please make sure that you download the IQ-TREE version 2.2.0 or late
 
 The estimation (training) then can be accomplished with just one command. The command is:
 
-**python Qmix.py 4x 0.95 input_folder**
+**sh Qmix.sh 4x 0.95 input_folder**
 
 Options:
 -	**4x**: specifies for free-schema distribution, the resulted matrix will be HSSP4X which is similar to LG4X. We can change to 4m for HSSP4M.
