@@ -49,6 +49,11 @@ def step3(dataset):
     for f in glob.glob(r"%s/*.phyml"%dataset):
 	print("process file %s"%f)
 	aln = f.split('/')[1]
+	if str(os.path.exists("%s.sitelh"%(aln))) == "False":
+	    print("Remove file %s/%s"%(dataset,aln))
+	    cmd = "rm %s/%s"%(dataset,aln)
+	    os.system(cmd)
+	    continue;
         sitelh_file = open("%s.sitelh"%aln, "r")
         for i in range(11):
             sitelh_file.readline()
