@@ -1,1 +1,0 @@
-sh run_step3_4m.sh 8 4
