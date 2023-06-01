@@ -16,13 +16,13 @@ def create_bjob_file(folder, loop_id):
 	cmd = "cp run_step3_4m.sh %s/"%(folder)
     os.system(cmd)
     if loop_id == 1:
-        cmd = 'cp Q.LG %s/Q.step3.4x.1'%(folder)
+        cmd = 'cp LG %s/Q.step3.4x.1'%(folder)
         os.system(cmd)
-        cmd = 'cp Q.LG %s/Q.step3.4x.2'%(folder)
+        cmd = 'cp LG %s/Q.step3.4x.2'%(folder)
         os.system(cmd)
-        cmd = 'cp Q.LG %s/Q.step3.4x.3'%(folder) 
+        cmd = 'cp LG %s/Q.step3.4x.3'%(folder) 
         os.system(cmd)
-        cmd = 'cp Q.LG %s/Q.step3.4x.4'%(folder)
+        cmd = 'cp LG %s/Q.step3.4x.4'%(folder)
         os.system(cmd)
     if site_rate_type == "4x":
         cmd = 'sh run.sh %d run_step3_4x.sh %d'%(loop_id,number_thread)
