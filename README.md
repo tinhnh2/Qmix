@@ -19,7 +19,7 @@ Options:
 -	**4x**: specifies for free-schema distribution, the resulted matrix will be HSSP4X which is similar to LG4X. We can change to 4m for HSSP4M.
 -	**0.95**: the correlation threshold condition for stopping estimation process (the training process consists of many loops, ~8 loops for HSSP4X to optimize upto 0.999), here we choose 0.95 for fast training in one loop.
 -	**18**: the number of CPU cores will be assigned for parallel running process.
--	**/home/test/hssp200**: the path of input alignment data set folder for training process
+-	**/home/test/hssp200**: the path of input alignment data set folder that you extracted.
 
 The 4 resulting matrices **(Q.1, Q.2, Q.3, Q.4)** are placed in the same running folder.
 
