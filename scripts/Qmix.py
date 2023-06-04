@@ -52,6 +52,9 @@ def pearon_corr(model1, model2):
 def do_step3(loop_id):
     print("This is step 3")
     if loop_id == 1:
+	if str(os.path.exists("loop%d"%loop_id)) == "True":
+	    cmd = "rm -rf loop%d"%loop_id
+	    os.system(cmd)
         cmd = "mkdir -p loop%d/step3"%(loop_id)
         os.system(cmd)
         cmd = "cp -rf %s loop%d/step3/data"%(data_path,loop_id)
