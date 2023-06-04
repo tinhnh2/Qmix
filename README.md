@@ -24,7 +24,7 @@ options:
 
 •	start_matrix: The starting matrix for process (LG/Q.pfam/JTT/WAG). If you need start from other matrix, please save matrix into a file and put it into the scripts folder
 
-•	alignments: the path to folder of alignments.
+•	alignments: the full path to folder of alignments.
 
   For example: sh Qmix.sh 4x 0.95 18 LG /home/user/Qmix/hssp200
 
