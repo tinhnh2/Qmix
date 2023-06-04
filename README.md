@@ -12,7 +12,7 @@ In followings we will instruct you how to estimate 4-matrix mixture models from 
 -	Create a folder containing all alignments. For testing purpose, download “hssp200.zip” file from folder data; extract the file to get the folder hssp200 containing 200 HSSP alignments. 
 -	Execute the Qmix program as followings:
 
-  sh Qmix.sh type corr cores alignments
+  sh Qmix.sh type corr cores start_matrix alignments
 
 options:
 
@@ -22,9 +22,11 @@ options:
 
 •	cores: The number of CPU cores for parallel running.
 
+•	start_matrix: The starting matrix for process (LG/Q.pfam/JTT/WAG). If you need start from other matrix, please save matrix into a file and put it into the scripts folder
+
 •	alignments: the path to folder of alignments.
 
-  For example: sh Qmix.sh 4x 0.95 18 /home/user/Qmix/hssp200
+  For example: sh Qmix.sh 4x 0.95 18 LG /home/user/Qmix/hssp200
 
 The Qmix program will use 18 CPU cores to estimate a 4-matrix mixture model from alignments in the /home/user/Qmix/hssp200 folder following the free-distribution scheme for site rates. The Qmix program will output four matrices Q.1, Q.2, Q.3, and Q.4 (corresponding to the ‘very slow’, ‘slow’, ‘medium’, and ‘fast’ rate category, respectively) to the same running folder. 
 
