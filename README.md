@@ -8,7 +8,7 @@ We applied the QMix program to estimate two mixture models from 1471 HSSP alignm
 
 In followings we will instruct you how to estimate 4-matrix mixture models from a set of alignments.
 
--	Download Qmix.sh script; and the scripts folder that includes scripts for all steps of the Qmix algorithm. The scripts are written in Perl, Python so please install Python and Perl. The Qmix scripts are built from the IQ-TREE software (iqtree.org), therefore, you need the iqtree version 2.2.0 or later and set PATH to the iqtree program (i.e. export PATH=path_to_iqtree:$PATH)
+-	Download Qmix.sh script; and the scripts folder that includes scripts for all steps of the Qmix algorithm. The scripts are written in Python so please install Python. The Qmix scripts are built from the IQ-TREE software (iqtree.org), therefore, you need the iqtree version 2.2.0 or later and set PATH to the iqtree program (i.e. export PATH=path_to_iqtree:$PATH)
 -	Create a folder containing all alignments. For testing purpose, download “hssp200.zip” file from folder data; extract the file to get the folder hssp200 containing 200 HSSP alignments. 
 -	Execute the Qmix program as followings:
 
