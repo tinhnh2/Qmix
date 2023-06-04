@@ -8,6 +8,7 @@ site_rate_type = "4x"
 data_path = ""
 corr_thres = 0.95
 number_thread = 8
+start_matrix="LG"
 def create_bjob_file(folder, loop_id):
     # Run Modelfinder on training set
     if site_rate_type == "4x":
@@ -16,13 +17,13 @@ def create_bjob_file(folder, loop_id):
 	cmd = "cp run_step3_4m.sh %s/"%(folder)
     os.system(cmd)
     if loop_id == 1:
-        cmd = 'cp LG %s/Q.step3.4x.1'%(folder)
+        cmd = 'cp %s %s/Q.step3.4x.1'%(start_matrix,folder)
         os.system(cmd)
-        cmd = 'cp LG %s/Q.step3.4x.2'%(folder)
+        cmd = 'cp %s %s/Q.step3.4x.2'%(start_matrix,folder)
         os.system(cmd)
-        cmd = 'cp LG %s/Q.step3.4x.3'%(folder) 
+        cmd = 'cp %s %s/Q.step3.4x.3'%(start_matrix,folder) 
         os.system(cmd)
-        cmd = 'cp LG %s/Q.step3.4x.4'%(folder)
+        cmd = 'cp %s %s/Q.step3.4x.4'%(start_matrix,folder)
         os.system(cmd)
     if site_rate_type == "4x":
         cmd = 'sh run.sh %d run_step3_4x.sh %d'%(loop_id,number_thread)
@@ -131,6 +132,7 @@ def main():
 if __name__ == '__main__':
     site_rate_type = sys.argv[1]
     corr_thres = sys.argv[2]
-    data_path = sys.argv[4]
     number_thread = int(sys.argv[3])
+    start_matrix = sys.argv[4]
+    data_path = sys.argv[5]
     main()
