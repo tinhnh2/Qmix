@@ -4,6 +4,7 @@ import time
 import sys
 import glob
 os.environ["CURR_DIR"] = os.getcwd()
+time_model = "GTR20"
 site_rate_type = "4x"
 data_path = ""
 corr_thres = 0.95
@@ -37,8 +38,11 @@ def pearon_corr(model1, model2):
     print(model2)
     file1 = open(model1,"r")
     file2 = open(model2,"r")
-    list1 = [0]*190
-    list2 = [0]*190
+    len_ = 190
+    if time_model != "GTR20":
+	len_ = 400
+    list1 = [0]*len_
+    list2 = [0]*len_
     line1 = file1.read().split()
     line2 = file2.read().split()
     line1 = line1[:-20]
@@ -72,7 +76,7 @@ def do_step5(loop_id):
     print("This is step 5")
     cmd = "mkdir -p loop%d/step5"%(loop_id)
     os.system(cmd)
-    cmd = "sh step5.sh %d %d"%(loop_id,number_thread)
+    cmd = "sh step5.sh %d %d %s"%(loop_id,number_thread,time_model)
     os.system(cmd)
 
 def loop(loop_id):
@@ -106,12 +110,12 @@ def main():
     exit_loop = 0
     while exit_loop == 0:
 	loop(loop_id)
-	cmd = "sh normalized.sh %d"%loop_id
-	os.system(cmd)
-        corr1 = pearon_corr("loop%d/step5/Q.step3.4x.1"%loop_id,"loop%d/step5/Q.step5.4x.1.normalized"%loop_id)
-        corr2 = pearon_corr("loop%d/step5/Q.step3.4x.2"%loop_id,"loop%d/step5/Q.step5.4x.2.normalized"%loop_id)
-        corr3 = pearon_corr("loop%d/step5/Q.step3.4x.3"%loop_id,"loop%d/step5/Q.step5.4x.3.normalized"%loop_id)
-        corr4 = pearon_corr("loop%d/step5/Q.step3.4x.4"%loop_id,"loop%d/step5/Q.step5.4x.4.normalized"%loop_id)
+	#cmd = "sh normalized.sh %d"%loop_id
+	#os.system(cmd)
+        corr1 = pearon_corr("loop%d/step5/Q.step3.4x.1"%loop_id,"loop%d/step5/Q.step5.4x.1"%loop_id)
+        corr2 = pearon_corr("loop%d/step5/Q.step3.4x.2"%loop_id,"loop%d/step5/Q.step5.4x.2"%loop_id)
+        corr3 = pearon_corr("loop%d/step5/Q.step3.4x.3"%loop_id,"loop%d/step5/Q.step5.4x.3"%loop_id)
+        corr4 = pearon_corr("loop%d/step5/Q.step3.4x.4"%loop_id,"loop%d/step5/Q.step5.4x.4"%loop_id)
         print("Pearson correllation: %.8f, %.8f, %.8f, %.8f"%(corr1,corr2,corr3,corr4))
         if corr1 < float(corr_thres) or corr2 < float(corr_thres) or corr3 < float(corr_thres) or corr4 < float(corr_thres):
             cmd = "cp -rf loop%d loop%d"%(loop_id,loop_id+1)
@@ -121,6 +125,8 @@ def main():
 	    loop_id = loop_id + 1
         else:
 	    exit_loop = 1
+	    cmd = "sh normalized.sh %d %s"%(loop_id,time_model)
+	    os.system(cmd)
 	    cmd = "cp loop%d/step5/Q.step5.4x.1.normalized ../Q.1"%loop_id
 	    os.system(cmd)
 	    cmd = "cp loop%d/step5/Q.step5.4x.2.normalized ../Q.2"%loop_id
@@ -133,9 +139,10 @@ def main():
 
 # call main function
 if __name__ == '__main__':
-    site_rate_type = sys.argv[1]
-    corr_thres = sys.argv[2]
-    number_thread = int(sys.argv[3])
-    start_matrix = sys.argv[4]
-    data_path = sys.argv[5]
+    time_model = sys.argv[1]
+    site_rate_type = sys.argv[2]
+    corr_thres = sys.argv[3]
+    number_thread = int(sys.argv[4])
+    start_matrix = sys.argv[5]
+    data_path = sys.argv[6]
     main()

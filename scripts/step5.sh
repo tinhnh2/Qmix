@@ -22,7 +22,7 @@ cp step5.4.* loop$1/step5/
 cp normalized.sh loop$1/step5/
 cp NormalizeMatrix.pl loop$1/step5/
 cd ${CURR_DIR}/loop$1/step5
-sh step5.1.sh $2
-sh step5.2.sh $2
-sh step5.3.sh $2
-sh step5.4.sh $2
+sh step5.1.sh $2 $3
+sh step5.2.sh $2 $3
+sh step5.3.sh $2 $3
+sh step5.4.sh $2 $3
