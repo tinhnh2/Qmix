@@ -17,7 +17,7 @@ In followings we will instruct you how to estimate 4-matrix mixture models from 
 
 options:
 
-•	substitution_model: GTR20 for time reversible model or NONREV for time non-reversible model.
+•	substitution_model: set to GTR20 for time reversible model.
 
 •	type: Type of the mixture model, i.e., 4m (the gamma distribution) or 4x (distribution-free scheme).
 
