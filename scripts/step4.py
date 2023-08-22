@@ -46,7 +46,7 @@ def write_to_out(dataset, in_aln_name, list_out, id_out, count, list_zero):
 def estimate_model():
     print("This procedure is to estimate new models")
 def step3(dataset):
-    for f in glob.glob(r"%s/*.phyml"%dataset):
+    for f in glob.glob(r"%s/*.*"%dataset):
 	print("process file %s"%f)
 	aln = f.split('/')[1]
 	if str(os.path.exists("%s.sitelh"%(aln))) == "False":
@@ -129,7 +129,7 @@ def rescale_tree(tree, rate, group_id, name, path):
     outFile.writelines(output)
 
 def step4(dataset):
-    for f in glob.glob(r"%s/*.phyml"%dataset):
+    for f in glob.glob(r"%s/*.*"%dataset):
 	print("step4 %s"%f)
 	aln = f.split('/')[1]
 	treefiles = open("%s.treefile"%aln, "r")
