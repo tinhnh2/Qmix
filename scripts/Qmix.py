@@ -5,14 +5,14 @@ import sys
 import glob
 os.environ["CURR_DIR"] = os.getcwd()
 time_model = "GTR20"
-site_rate_type = "4x"
+site_rate_type = "4X"
 data_path = ""
 corr_thres = 0.95
 number_thread = 8
 start_matrix="LG"
 def create_bjob_file(folder, loop_id):
     # Run Modelfinder on training set
-    if site_rate_type == "4x":
+    if site_rate_type == "4X" or site_rate_type == "4x":
         cmd = "cp run_step3_4x.sh %s/"%(folder)
     else:
 	cmd = "cp run_step3_4m.sh %s/"%(folder)
@@ -26,7 +26,7 @@ def create_bjob_file(folder, loop_id):
         os.system(cmd)
         cmd = 'cp %s %s/Q.step3.4x.4'%(start_matrix,folder)
         os.system(cmd)
-    if site_rate_type == "4x":
+    if site_rate_type == "4X" or site_rate_type == "4x":
         cmd = 'sh run.sh %d run_step3_4x.sh %d'%(loop_id,number_thread)
     else:
         cmd = 'sh run.sh %d run_step3_4m.sh %d'%(loop_id,number_thread)
