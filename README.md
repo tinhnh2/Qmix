@@ -13,13 +13,12 @@ In followings we will instruct you how to estimate 4-matrix mixture models from 
 -	Create a folder containing all alignments. For testing purpose, download “hssp200.zip” file from folder data; extract the file to get the folder hssp200 containing 200 HSSP alignments. 
 -	Execute the Qmix program as followings:
 
-  sh Qmix.sh substitution_model type correlation cores start_matrix alignments
+  sh Qmix.sh model_type correlation cores start_matrix alignments
 
 options:
 
-•	substitution_model: set to GTR20 for time reversible model.
 
-•	type: Type of the mixture model, i.e., 4m (the gamma distribution) or 4x (distribution-free scheme).
+•	model_type: Type of the mixture model, i.e., 4M (the gamma distribution) or 4X (distribution-free scheme).
 
 •	correlation: The Pearson correlation threshold used to stop the model estimation process. The default value is 0.99
 
@@ -29,7 +28,7 @@ options:
 
 •	alignments: the full path to folder of alignments.
 
-  For example: sh Qmix.sh GTR20 4x 0.95 18 LG /home/user/Qmix/hssp200
+  For example: sh Qmix.sh 4X 0.95 18 LG /home/user/Qmix/hssp200
 
 The Qmix program will use 18 CPU cores to estimate a 4-matrix mixture time reversible model from alignments in the /home/user/Qmix/hssp200 folder following the free-distribution scheme for site rates. The Qmix program will output four matrices Q.1, Q.2, Q.3, and Q.4 (corresponding to the ‘very slow’, ‘slow’, ‘medium’, and ‘fast’ rate category, respectively) to the same running folder. 
 
