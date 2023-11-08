@@ -139,10 +139,10 @@ def main():
 
 # call main function
 if __name__ == '__main__':
-    time_model = sys.argv[1]
-    site_rate_type = sys.argv[2]
-    corr_thres = sys.argv[3]
-    number_thread = int(sys.argv[4])
-    start_matrix = sys.argv[5]
-    data_path = sys.argv[6]
+    #time_model = sys.argv[1]
+    site_rate_type = sys.argv[1]
+    corr_thres = sys.argv[2]
+    number_thread = int(sys.argv[3])
+    start_matrix = sys.argv[4]
+    data_path = sys.argv[5]
     main()
