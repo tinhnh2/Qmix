@@ -6,13 +6,13 @@ The single-matrix models are widely used in phylogenetic analyses; however, they
 
 In followings we will instruct you how to estimate 4-matrix mixture models from a set of alignments.
 
--	Download Qmix.sh script; and the scripts folder that includes scripts for all steps of the Qmix algorithm. The scripts are written in Python so please install Python. 
+-	Download Qmix.py script; and the workflow folder that includes scripts for all steps of the Qmix algorithm. The scripts are written in Python so please install Python. 
 -	The Qmix scripts are built from the IQ-TREE software (iqtree.org), therefore, you need the iqtree version 2.2.0 or later and set PATH to the iqtree program (i.e. export PATH=path_to_iqtree:$PATH)
 -	Create a folder containing all alignments. For testing purpose, download “hssp200.zip” file from folder data; extract the file to get the folder hssp200 containing 200 HSSP alignments. 
 -	Execute the Qmix program as followings:
 cd 
  
- Qmix.py -model rate_model -cor correlation_threshold -threads number_threads -initial start_matrix -data training_alignment_set
+ python Qmix.py -model rate_model -cor correlation_threshold -threads number_threads -initial start_matrix -data training_alignment_set
 
 options:
 
@@ -27,7 +27,7 @@ options:
 
 •	data: the full path to folder of alignments.
 
-  For example: Qmix.py -model 4M -cor 0.99 -threads 18 -initial LG -data /home/user/hssp200
+  For example: python Qmix.py -model 4M -cor 0.99 -threads 18 -initial LG -data /home/user/hssp200
 
 The Qmix program will use 18 CPU cores to estimate a 4-matrix mixture time reversible model from alignments in the /home/user/Qmix/hssp200 folder following the free-distribution scheme for site rates. The Qmix program will output four matrices Q.1, Q.2, Q.3, and Q.4 (corresponding to the ‘very slow’, ‘slow’, ‘medium’, and ‘fast’ rate category, respectively) to the same running folder. 
 
