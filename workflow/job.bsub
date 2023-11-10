@@ -1,0 +1,6 @@
+#BSUB -J hssp_c20
+#BSUB -n 18
+#BSUB -R "span[hosts=1]"
+#BSUB -q normal
+#BSUB -m "fit01 fit02 fit03 fit04 fit05 fit08 fit09 fit10 fit11 fit12 fit13 fit14 fit15"
+python3.8 Qmix.py -model 4M -cor 0.99 -threads 18 -initial LG -data /home/vinhbio/tinhnh/MixtureModel/test_Qmix/test_software/Qmix-main/data/hssp200
