@@ -11,6 +11,7 @@ Installation:
 -	Create a folder containing all alignments. The "hssp200.zip" with 200 HSSP alignments and “hssp1471.zip” with 1471 HSSP alignments are available in the folder data.
 
 Execution:  Estimating a 4-matrix mixture model from a set of alignments can be accomplished by QMix with one command:
+
  python Qmix.py -model rate_model -cor correlation_threshold -threads number_threads -initial start_matrix -data training_alignment_set
 
 Options:
