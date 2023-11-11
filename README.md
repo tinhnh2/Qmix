@@ -6,7 +6,7 @@ The single-matrix amino acid substitution models are widely used in phylogenetic
 
 Installation:
 
--	Download the Python Qmix.py program for running all steps of the QMix workflow.
+-	Download the Python Qmix.py program and the folder 'initial_models' containing some initial models for the QMix estimation process.
 -	The QMix uses the IQ-TREE software (iqtree.org). Download the IQ-TREE version 2.2.0 or later and set PATH to the iqtree program (i.e. export PATH=path_to_iqtree:$PATH)
 -	Create a folder containing all alignments. The "hssp200.zip" with 200 HSSP alignments and “hssp1471.zip” with 1471 HSSP alignments are available in the folder data.
 
