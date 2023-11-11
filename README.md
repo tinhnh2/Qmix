@@ -22,7 +22,7 @@ Options:
 
 •	threads: The number of threads for parallel running.
 
-•	initial: The starting matrix for the estimation process (LG/Q.pfam/JTT/WAG). If you want to start from another matrix, copy the file containing the matrix to the workflow folder.
+•	initial: The starting matrix for the estimation process (LG/Q.pfam/JTT/WAG). If you want to start from another matrix, copy the file containing the matrix to the initial models folder.
 
 •	data: the full path to the folder of alignments.
 
