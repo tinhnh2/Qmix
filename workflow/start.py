@@ -140,7 +140,13 @@ def main():
             loop_id = loop_id + 1
         else:
             exit_loop = 1
-            cmd = "sh normalized.sh %d %s" % (loop_id, time_model)
+            cmd = "python Nomarlize.py loop%d/step5/Q.step5.4x.1"%loop_id
+            os.system(cmd)
+            cmd = "python Nomarlize.py loop%d/step5/Q.step5.4x.2"%loop_id
+            os.system(cmd)
+            cmd = "python Nomarlize.py loop%d/step5/Q.step5.4x.3"%loop_id
+            os.system(cmd)
+            cmd = "python Nomarlize.py loop%d/step5/Q.step5.4x.4"%loop_id
             os.system(cmd)
             cmd = "cp loop%d/step5/Q.step5.4x.1.normalized ../Q.1" % loop_id
             os.system(cmd)
