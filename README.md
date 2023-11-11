@@ -26,7 +26,9 @@ Options:
 
 •	data: the full path to the folder of alignments.
 
-  For example: python Qmix.py -model 4X -cor 0.99 -threads 18 -initial LG -data /home/user/hssp200
+  For example: 
+  
+  python Qmix.py -model 4X -cor 0.99 -threads 18 -initial LG -data /home/user/hssp200
 
 The Qmix program will use threads to estimate a 4-matrix mixture time reversible model from alignments in the /home/user/Qmix/hssp200 folder following the free-distribution scheme for site rates. The Qmix program will output four matrices Q.1, Q.2, Q.3, and Q.4 (corresponding to the ‘very slow’, ‘slow’, ‘medium’, and ‘fast’ rate category, respectively) to the same running folder.
 
