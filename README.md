@@ -6,13 +6,13 @@ The single-matrix amino acid substitution models are widely used in phylogenetic
 
 Installation:
 
--	Download the Python Qmix.py program; and the 'workflow' folder that includes scripts for running all steps of the QMix workflow.
--	The QMix workflow uses the IQ-TREE software (iqtree.org). Download the IQ-TREE version 2.2.0 or later and set PATH to the iqtree program (i.e. export PATH=path_to_iqtree:$PATH)
+-	Download the Python Qmix.py program for running all steps of the QMix workflow.
+-	The QMix uses the IQ-TREE software (iqtree.org). Download the IQ-TREE version 2.2.0 or later and set PATH to the iqtree program (i.e. export PATH=path_to_iqtree:$PATH)
 -	Create a folder containing all alignments. The "hssp200.zip" with 200 HSSP alignments and “hssp1471.zip” with 1471 HSSP alignments are available in the folder data.
 
 Execution:  Estimating a 4-matrix mixture model from a set of alignments can be accomplished by QMix with one command:
 
- python Qmix.py -model rate_model -cor correlation_threshold -threads number_threads -initial start_matrix -data training_alignment_set
+ python Qmix.py -model rate_model -cor correlation_threshold -threads number_threads -initial start_model -data training_alignment_set
 
 Options:
 
@@ -22,7 +22,7 @@ Options:
 
 •	threads: The number of threads for parallel running.
 
-•	initial: The starting matrix for the estimation process (LG/Q.pfam/JTT/WAG). If you want to start from another matrix, copy the file containing the matrix to the initial models folder.
+•	initial: The starting model for the estimation process (LG/Q.pfam/JTT/WAG). If you want to start from another model, copy the file containing the model to the initial models folder.
 
 •	data: the full path to the folder of alignments.
 
