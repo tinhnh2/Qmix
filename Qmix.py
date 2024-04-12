@@ -9,7 +9,7 @@ import glob
 CURR_DIR = os.getcwd()
 print("Current dir: %s" % CURR_DIR)
 time_model = "GTR20"
-site_rate_type = "4X"
+site_rate_type = "X"
 data_path = ""
 corr_thres = 0.95
 number_thread = 8
@@ -417,8 +417,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='QMix')
     parser.add_argument('-model',
                         type=str,
-                        default='4M',
-                        choices=['4M', '4X'])
+                        default='X',
+                        choices=['M', 'X'])
 
     parser.add_argument('-cor',
                         type=str,
