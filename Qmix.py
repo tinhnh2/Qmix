@@ -14,6 +14,7 @@ data_path = ""
 corr_thres = 0.95
 number_thread = 8
 start_matrix = "LG"
+n_cat = 4
 
 
 def normalize(input_file):
@@ -71,26 +72,25 @@ def normalize(input_file):
 def run_step2(folder, loop_id):
     # Run Modelfinder on training set
     if loop_id == 1:
-        cmd = 'cp initial_models/%s %s/Q.step2.4x.1' % (start_matrix, folder)
-        os.system(cmd)
-        cmd = 'cp initial_models/%s %s/Q.step2.4x.2' % (start_matrix, folder)
-        os.system(cmd)
-        cmd = 'cp initial_models/%s %s/Q.step2.4x.3' % (start_matrix, folder)
-        os.system(cmd)
-        cmd = 'cp initial_models/%s %s/Q.step2.4x.4' % (start_matrix, folder)
-        os.system(cmd)
+        num_ = int(n_cat) + 1
+        for i in range(1,num_):
+            cmd = 'cp initial_models/%s %s/Q.step2.4x.%d' % (start_matrix, folder, i)
+            os.system(cmd)
     os.chdir("%s/loop%d/step2" % (CURR_DIR, loop_id))
+    mix_str = ""
+    for i in range(1, n_cat+1):
+        mix_str += "Q.step2.4x.%d," % i
     if site_rate_type == "4X" or site_rate_type == "4x":
         for aln_file in glob.glob(r"data/*.phyml"):
             aln_name = aln_file.split('/')[1]
-            cmd = "iqtree2 -seed 1 -T %d -s %s --prefix %s -m \"MIX{Q.step2.4x.1,Q.step2.4x.2,Q.step2.4x.3,Q.step2.4x.4}*R4\" --no-seq-comp -wslmr" % (
-                number_thread, aln_file, aln_name)
+            cmd = "iqtree2 -seed 1 -T %d -s %s --prefix %s -m \"MIX{%s}*R%d\" --no-seq-comp -wslmr" % (
+                number_thread, aln_file, aln_name, mix_str,n_cat)
             os.system(cmd)
     else:
         for aln_file in glob.glob(r"data/*.phyml"):
             aln_name = aln_file.split('/')[1]
-            cmd = "iqtree2 -seed 1 -T %d -s %s --prefix %s -m \"MIX{Q.step2.4x.1,Q.step2.4x.2,Q.step2.4x.3,Q.step2.4x.4}*G4\" --no-seq-comp -wslmr" % (
-                number_thread, aln_file, aln_name)
+            cmd = "iqtree2 -seed 1 -T %d -s %s --prefix %s -m \"MIX{%s}*G%d\" --no-seq-comp -wslmr" % (
+                number_thread, aln_file, aln_name, mix_str,n_cat)
             os.system(cmd)
     cmd = "touch step2.iqtree"
     os.system(cmd)
@@ -180,8 +180,14 @@ def write_to_out(dataset, in_aln_name, list_out, id_out, count, list_zero):
 
 
 def step2(dataset):
+    number_msa = 0
     for f in glob.glob(r"%s/*.*" % dataset):
-        print("process file %s" % f)
+        number_msa += 1
+    print("Number of msa: %d"%number_msa)
+    for f in glob.glob(r"%s/*.*" % dataset):
+        fi = open(f,'r')
+        n_site = int(fi.readline().split()[1])
+        print("process file %s, sites: %d" % (f,n_site))
         aln = f.split('/')[1]
         if str(os.path.exists("%s.sitelh" % (aln))) == "False":
             print("Remove file %s/%s" % (dataset, aln))
@@ -191,45 +197,24 @@ def step2(dataset):
         sitelh_file = open("%s.sitelh" % aln, "r")
         for i in range(11):
             sitelh_file.readline()
-        list1 = {}
-        list2 = {}
-        list3 = {}
-        list4 = {}
-        id_out1 = 0
-        id_out2 = 0
-        id_out3 = 0
-        id_out4 = 0
+        list_arr = [[0 for j in range(n_site)] for i in range(n_cat+1)]
+        id_out_arr = [0 for j in range(n_cat+1)]
         for line in sitelh_file:
             list = line.split()
             site = int(list[0])
-            lnLH = float(list[1])
-            max = float(list[2])
-            id = 0
-            if max < float(list[3]):
-                max = float(list[3])
-                id = 1
-            if max < float(list[4]):
-                max = float(list[4])
-                id = 2
-            if max < float(list[5]):
-                max = float(list[5])
-                id = 3
-            if id == 0:
-                list1[id_out1] = site
-                id_out1 = id_out1 + 1
-            if id == 1:
-                list2[id_out2] = site
-                id_out2 = id_out2 + 1
-            if id == 2:
-                list3[id_out3] = site
-                id_out3 = id_out3 + 1
-            if id == 3:
-                list4[id_out4] = site
-                id_out4 = id_out4 + 1
-        write_to_out(dataset, aln, list1, 1, id_out1, list_zero)
-        write_to_out(dataset, aln, list2, 2, id_out2, list_zero)
-        write_to_out(dataset, aln, list3, 3, id_out3, list_zero)
-        write_to_out(dataset, aln, list4, 4, id_out4, list_zero)
+            rate_arr = [0.0]*n_cat
+            rate_arr[0] = float(list[2])
+            max_value = float(list[2])
+            id = 1
+            for i in range(n_cat):
+                rate_arr[i] = float(list[i+2])
+                if max_value < rate_arr[i]:
+                    max_value = rate_arr[i]
+                    id = i+1
+            list_arr[id][id_out_arr[id]] = site
+            id_out_arr[id] += 1
+        for i in range(1,n_cat + 1):
+            write_to_out(dataset, aln, list_arr[i], i, id_out_arr[i], list_zero)
 
 
 def rescale_tree(tree, rate, group_id, name, path):
@@ -268,17 +253,15 @@ def step3(dataset):
         aln = f.split('/')[1]
         treefiles = open("%s.treefile" % aln, "r")
         tree = treefiles.readline()
-        cmd = "grep -A 4 \"Category  Relative_rate  Proportion\" %s.iqtree | tail -n4 > tmp_%s.iqtree" % (aln, aln)
+        cmd = "grep -A %d \"Category  Relative_rate  Proportion\" %s.iqtree | tail -n%d > tmp_%s.iqtree" % (n_cat,aln,n_cat, aln)
         os.system(cmd)
         iqtree_file = open("tmp_%s.iqtree" % aln, "r")
         rate = {}
-        rate[0] = iqtree_file.readline().split()[1]
-        rate[1] = iqtree_file.readline().split()[1]
-        rate[2] = iqtree_file.readline().split()[1]
-        rate[3] = iqtree_file.readline().split()[1]
+        for i in range(n_cat):
+            rate[i] = iqtree_file.readline().split()[1]
         iqtree_file.close()
         treefiles.close()
-        for j in range(4):
+        for j in range(n_cat):
             print("Rate is %s" % rate[j])
             rescale_tree(tree, float(rate[j]), j+1, aln, "trees")
     for i in range(count_zero):
@@ -297,7 +280,10 @@ def do_step3(loop_id):
     os.system(cmd)
     os.chdir("%s/loop%d/step3" % (CURR_DIR, loop_id))
     os.system(cmd)
-    cmd = "mkdir step2_out1; mkdir step2_out2; mkdir step2_out3; mkdir step2_out4; mkdir -p trees/out1; mkdir -p trees/out2; mkdir -p trees/out3; mkdir -p trees/out4"
+    cmd = ""
+    for i in range(1,n_cat+1):
+        cmd += "mkdir step2_out%d;"%i
+        cmd += "mkdir -p trees/out%d;"%i
     os.system(cmd)
     cmd = "cp -rf ../step2/* ."
     os.system(cmd)
@@ -312,41 +298,25 @@ def do_step4(loop_id):
     os.chdir("%s/loop%d/step4" % (CURR_DIR, loop_id))
     cmd = "rm step4*"
     os.system(cmd)
-    cmd = "cat ../step3/trees/out1/* > tree1.treefile;cat ../step3/trees/out2/* > tree2.treefile;cat ../step3/trees/out3/* > tree3.treefile;cat ../step3/trees/out4/* > tree4.treefile"
+    cmd = ""
+    for i in range(1,n_cat+1):
+        cmd += "cat ../step3/trees/out%d/* > tree%d.treefile;"%(i,i)
     os.system(cmd)
-    cmd = "mkdir out1;mkdir out2;mkdir out3;mkdir out4"
-    os.system(cmd)
-    cmd = "cp ../step3/step2_out1/* out1/"
-    os.system(cmd)
-    cmd = "cp ../step3/step2_out2/* out2/"
-    os.system(cmd)
-    cmd = "cp ../step3/step2_out3/* out3/"
-    os.system(cmd)
-    cmd = "cp ../step3/step2_out4/* out4/"
-    os.system(cmd)
+    cmd = ""
+    for i in range(1,n_cat + 1):
+        cmd = "mkdir out%d"%i
+        os.system(cmd)
+        cmd = "cp ../step3/step2_out%d/* out%d/"%(i,i)
+        os.system(cmd)
 
     cmd = "cp ../step2/Q.step2.4x* ."
     os.system(cmd)
-    cmd = "iqtree2 -seed 1 -st AA -T %d -S out1  -te tree1.treefile --model-joint GTR20+FO --init-model Q.step2.4x.1  --prefix step4.1 " % (
-        number_thread)
-    os.system(cmd)
-    cmd = "grep -A 22 \"can be used as input for IQ-TREE\" step4.1.iqtree | tail -n21 > Q.step4.4x.1"
-    os.system(cmd)
-    cmd = "iqtree2 -seed 1 -st AA -T %d -S out2  -te tree2.treefile --model-joint GTR20+FO --init-model Q.step2.4x.2  --prefix step4.2 " % (
-        number_thread)
-    os.system(cmd)
-    cmd = "grep -A 22 \"can be used as input for IQ-TREE\" step4.2.iqtree | tail -n21 > Q.step4.4x.2"
-    os.system(cmd)
-    cmd = "iqtree2 -seed 1 -st AA -T %d -S out3  -te tree3.treefile --model-joint GTR20+FO --init-model Q.step2.4x.3  --prefix step4.3 " % (
-        number_thread)
-    os.system(cmd)
-    cmd = "grep -A 22 \"can be used as input for IQ-TREE\" step4.3.iqtree | tail -n21 > Q.step4.4x.3"
-    os.system(cmd)
-    cmd = "iqtree2 -seed 1 -st AA -T %d -S out4  -te tree4.treefile --model-joint GTR20+FO --init-model Q.step2.4x.4  --prefix step4.4 " % (
-        number_thread)
-    os.system(cmd)
-    cmd = "grep -A 22 \"can be used as input for IQ-TREE\" step4.4.iqtree | tail -n21 > Q.step4.4x.4"
-    os.system(cmd)
+    for i in range(1,n_cat + 1):
+        cmd = "iqtree2 -seed 1 -st AA -T %d -S out%d  -te tree%d.treefile --model-joint GTR20+FO --init-model Q.step2.4x.%d  --prefix step4.%d " % (
+            number_thread,i,i,i,i)
+        os.system(cmd)
+        cmd = "grep -A 22 \"can be used as input for IQ-TREE\" step4.%d.iqtree | tail -n21 > Q.step4.4x.%d"%(i,i)
+        os.system(cmd)
 
 
 def loop(loop_id):
@@ -365,10 +335,10 @@ def loop(loop_id):
     os.chdir("%s"%CURR_DIR)
     while 1:
         check = 0
-        for i in range(1, 5):
+        for i in range(1, n_cat + 1):
             if str(os.path.exists("loop%d/step4/Q.step4.4x.%d" % (loop_id, i))) == "True":
                 check = check + 1
-        if check < 4:
+        if check < n_cat:
             time.sleep(10)
         else:
             break
@@ -381,56 +351,45 @@ def main_run():
     loop_id = 1
     exit_loop = 0
     while exit_loop == 0:
-	global count_zero
-	count_zero = 0
+        global count_zero
+        count_zero = 0
         loop(loop_id)
         os.chdir("%s" % CURR_DIR)
-        corr1 = pearon_corr("loop%d/step4/Q.step2.4x.1" %
-                            loop_id, "loop%d/step4/Q.step4.4x.1" % loop_id)
-        corr2 = pearon_corr("loop%d/step4/Q.step2.4x.2" %
-                            loop_id, "loop%d/step4/Q.step4.4x.2" % loop_id)
-        corr3 = pearon_corr("loop%d/step4/Q.step2.4x.3" %
-                            loop_id, "loop%d/step4/Q.step4.4x.3" % loop_id)
-        corr4 = pearon_corr("loop%d/step4/Q.step2.4x.4" %
-                            loop_id, "loop%d/step4/Q.step4.4x.4" % loop_id)
-        print("Pearson correllation: %.8f, %.8f, %.8f, %.8f" %
-              (corr1, corr2, corr3, corr4))
-        if corr1 < float(corr_thres) or corr2 < float(corr_thres) or corr3 < float(corr_thres) or corr4 < float(corr_thres):
+        corr = [0.0] * (n_cat+1)
+        print("Pearson correllation:")
+        for i in range(1,n_cat + 1):
+            corr[i] = pearon_corr("loop%d/step4/Q.step2.4x.%d" %
+                                  (loop_id,i), "loop%d/step4/Q.step4.4x.%d" % (loop_id,i))
+            print("%.8f"%corr[i])
+        check_corr = False
+        for element in corr[1:]:
+            if element < float(corr_thres):
+                check_corr = True
+                break
+        if check_corr == True:
             cmd = "cp -rf loop%d loop%d" % (loop_id, loop_id+1)
             os.system(cmd)
-	    cmd = "cp -rf loop%d/step2/data loop%d/step4/"%(loop_id + 1, loop_id + 1)
-	    os.system(cmd)
-	    cmd = "rm loop%d/step2/*"%(loop_id + 1)
-	    os.system(cmd)
-	    cmd = "cp -rf loop%d/step4/data loop%d/step2/"%(loop_id + 1, loop_id + 1)
-	    os.system(cmd)
-	    cmd = "cp loop%d/step4/Q.step4.4x.1 loop%d/step2/Q.step2.4x.1"%(loop_id + 1, loop_id + 1)
-	    os.system(cmd)
-	    cmd = "cp loop%d/step4/Q.step4.4x.2 loop%d/step2/Q.step2.4x.2"%(loop_id + 1, loop_id + 1)
-	    os.system(cmd)
-	    cmd = "cp loop%d/step4/Q.step4.4x.3 loop%d/step2/Q.step2.4x.3"%(loop_id + 1, loop_id + 1)
-	    os.system(cmd)
-	    cmd = "cp loop%d/step4/Q.step4.4x.4 loop%d/step2/Q.step2.4x.4"%(loop_id + 1, loop_id + 1)
-	    os.system(cmd)
-	    cmd = "rm -rf loop%d/step3/*"%(loop_id + 1)
-	    os.system(cmd)
-	    cmd = "rm -rf loop%d/step4/*"%(loop_id + 1)
-	    os.system(cmd)
+            cmd = "cp -rf loop%d/step2/data loop%d/step4/"%(loop_id + 1, loop_id + 1)
+            os.system(cmd)
+            cmd = "rm loop%d/step2/*"%(loop_id + 1)
+            os.system(cmd)
+            cmd = "cp -rf loop%d/step4/data loop%d/step2/"%(loop_id + 1, loop_id + 1)
+            os.system(cmd)
+            cmd = ""
+            for i in range(1,n_cat + 1):
+                cmd = "cp loop%d/step4/Q.step4.4x.%d loop%d/step2/Q.step2.4x.%d"%(loop_id + 1,i, loop_id + 1,i)
+                os.system(cmd)
+            cmd = "rm -rf loop%d/step3/*"%(loop_id + 1)
+            os.system(cmd)
+            cmd = "rm -rf loop%d/step4/*"%(loop_id + 1)
+            os.system(cmd)
             loop_id = loop_id + 1
         else:
             exit_loop = 1
-            normalize("loop%d/step4/Q.step4.4x.1" % loop_id)
-            normalize("loop%d/step4/Q.step4.4x.2" % loop_id)
-            normalize("loop%d/step4/Q.step4.4x.3" % loop_id)
-            normalize("loop%d/step4/Q.step4.4x.4" % loop_id)
-            cmd = "cp loop%d/step4/Q.step4.4x.1.normalized Q.1" % loop_id
-            os.system(cmd)
-            cmd = "cp loop%d/step4/Q.step4.4x.2.normalized Q.2" % loop_id
-            os.system(cmd)
-            cmd = "cp loop%d/step4/Q.step4.4x.3.normalized Q.3" % loop_id
-            os.system(cmd)
-            cmd = "cp loop%d/step4/Q.step4.4x.4.normalized Q.4" % loop_id
-            os.system(cmd)
+            for i in range(1,n_cat + 1):
+                normalize("loop%d/step4/Q.step4.4x.%d" % (loop_id,i))
+                cmd = "cp loop%d/step4/Q.step4.4x.%d.normalized Q.%d" % (loop_id,i,i)
+                os.system(cmd)
             print("Finish process")
 
 
@@ -443,6 +402,8 @@ def run(args):
     number_thread = int(args.threads)
     global start_matrix
     start_matrix = args.initial
+    global n_cat
+    n_cat = int(args.cat)
     global data_path
     data_path = args.data
     print("mode; %s, cor: %s, theads: %d, initia: %s, dat_path: %s" %
@@ -473,6 +434,10 @@ if __name__ == '__main__':
                         type=str,
                         default='LG',
                         help='The initial matrix')
+    parser.add_argument('-cat',
+                        type=str,
+                        default='4',
+                        help='The number of gamma rate category')
     parser.add_argument('-data',
                         type=str,
                         default='',
@@ -481,3 +446,5 @@ if __name__ == '__main__':
     args = parser.parse_args(sys.argv[1:])
 
     run(args)
+
+
