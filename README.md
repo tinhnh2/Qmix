@@ -12,7 +12,7 @@ Installation:
 
 Execution:  Estimating a 4-matrix mixture model from a set of alignments can be accomplished by QMix with one command:
 
- python Qmix.py -model rate_model -cor correlation_threshold -threads number_threads -initial start_model -data training_alignment_set
+ python Qmix.py -model rate_model -cor correlation_threshold -threads number_threads -cat number_rate_categories -initial start_model -data training_alignment_set
 
 Options:
 
@@ -26,9 +26,11 @@ Options:
 
 •	data: the full path to the folder of alignments.
 
+•	cat: the number of rate categories, i.e, 2, 4, 8 rate categories.
+
   For example: 
   
-  python Qmix.py -model 4X -cor 0.99 -threads 18 -initial LG -data /home/user/hssp200
+  python Qmix.py -model 4X -cor 0.99 -threads 18 -cat 4 -initial LG -data /home/user/hssp200
 
 The Qmix program will output four matrices Q.1, Q.2, Q.3, and Q.4 (corresponding to the ‘very slow’, ‘slow’, ‘medium’, and ‘fast’ rate category, respectively) to the same running folder.
 
