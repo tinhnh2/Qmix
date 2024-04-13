@@ -403,7 +403,7 @@ def run(args):
     global start_matrix
     start_matrix = args.initial
     global n_cat
-    n_cat = int(args.cat)
+    n_cat = int(args.ncat)
     global data_path
     data_path = args.data
     print("Type of rate model: %s, cor: %s, theads: %d, number of rate categories: %d, initial: %s, data_path: %s" %
@@ -437,7 +437,7 @@ if __name__ == '__main__':
                         type=str,
                         default='LG',
                         help='The initial matrix')
-    parser.add_argument('-cat',
+    parser.add_argument('-ncat',
                         type=str,
                         default='4',
                         help='The number of gamma rate category')
