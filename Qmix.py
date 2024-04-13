@@ -395,18 +395,18 @@ def main_run():
 
 def run(args):
     global site_rate_type
-    site_rate_type = args.model
+    site_rate_type = args.rate_model
     global corr_thres
-    corr_thres = args.cor
+    corr_thres = args.corr_threshold
     global number_thread
-    number_thread = int(args.threads)
+    number_thread = int(args.nthread)
     global start_matrix
-    start_matrix = args.initial
+    start_matrix = args.init_model
     global n_cat
     n_cat = int(args.ncat)
     global data_path
     data_path = args.data
-    print("Type of rate model: %s, cor: %s, theads: %d, number of rate categories: %d, initial: %s, data_path: %s" %
+    print("Type of rate model: %s, corr_threshold: %s, number of theads: %d, number of rate categories: %d, init model: %s, data_path: %s" %
           (site_rate_type, corr_thres, number_thread, n_cat, start_matrix, data_path))
     if n_cat < 2:
         print("WARNING: A mixture model requires at least two categories.")
@@ -418,22 +418,22 @@ def run(args):
 if __name__ == '__main__':
     print("STARTING QMIX...")
     parser = argparse.ArgumentParser(description='QMix')
-    parser.add_argument('-model',
+    parser.add_argument('-rate_model',
                         type=str,
                         default='X',
                         choices=['M', 'X'])
 
-    parser.add_argument('-cor',
+    parser.add_argument('-corr_threshold',
                         type=str,
                         default="0.99",
                         help='the correlation threshold')
 
-    parser.add_argument('-threads',
+    parser.add_argument('-nthread',
                         type=str,
                         default="18",
                         help='The number of computing threads')
 
-    parser.add_argument('-initial',
+    parser.add_argument('-init_model',
                         type=str,
                         default='LG',
                         help='The initial matrix')
