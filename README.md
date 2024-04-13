@@ -22,11 +22,12 @@ Options:
 
 •	threads: The number of threads for parallel running.
 
+•	cat: the number of rate categories, i.e, 2, 4, 8 rate categories.
+
 •	initial: The starting model for the estimation process (LG/Q.pfam/JTT/WAG). If you want to start from another model, copy the file containing the model to the initial models folder.
 
 •	data: the full path to the folder of alignments.
 
-•	cat: the number of rate categories, i.e, 2, 4, 8 rate categories.
 
   For example: 
   
