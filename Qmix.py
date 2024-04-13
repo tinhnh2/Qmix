@@ -406,9 +406,12 @@ def run(args):
     n_cat = int(args.cat)
     global data_path
     data_path = args.data
-    print("mode; %s, cor: %s, theads: %d, initia: %s, dat_path: %s" %
-          (site_rate_type, corr_thres, number_thread, start_matrix, data_path))
-    main_run()
+    print("Type of rate model: %s, cor: %s, theads: %d, number of rate categories: %d, initial: %s, data_path: %s" %
+          (site_rate_type, corr_thres, number_thread, n_cat, start_matrix, data_path))
+    if n_cat < 2:
+        print("WARNING: A mixture model requires at least two categories.")
+    else:
+        main_run()
 
 
 # call main function
