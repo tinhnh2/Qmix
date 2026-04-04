@@ -5,6 +5,8 @@ import sys
 import numpy as np
 import time
 import glob
+from collections import Counter
+
 
 CURR_DIR = os.getcwd()
 print("Current dir: %s" % CURR_DIR)
@@ -16,6 +18,82 @@ number_thread = 8
 start_matrix = "LG"
 n_cat = 4
 
+GAP_CHARS = set(['-', '?', 'X', '.'])
+
+def read_phylip(file_path):
+    with open(file_path, 'r') as f:
+        lines = [line.strip() for line in f if line.strip()]
+
+    header = lines[0]
+
+    names = []
+    seqs = []
+
+    for line in lines[1:]:
+        parts = line.split()
+        name = parts[0]
+        seq = ''.join(parts[1:])
+        names.append(name)
+        seqs.append(seq)
+
+    return names, seqs
+
+def get_column_majority(seqs):
+    """Tính ký tự phổ biến nhất cho từng cột"""
+    nsites = len(seqs[0])
+    ntaxa = len(seqs)
+
+    majority = []
+
+    for i in range(nsites):
+        column = [seqs[j][i] for j in range(ntaxa)]
+        valid = [c for c in column if c not in GAP_CHARS]
+
+        if valid:
+            most_common = Counter(valid).most_common(1)[0][0]
+        else:
+            most_common = '-'  # fallback
+
+        majority.append(most_common)
+
+    return majority
+
+
+def fix_all_gap_sequences(seqs):
+    seqs = [list(seq) for seq in seqs]
+    majority = get_column_majority(seqs)
+
+    for i, seq in enumerate(seqs):
+        # kiểm tra sequence toàn gap
+        if all(c in GAP_CHARS for c in seq):
+            # tìm vị trí có majority hợp lệ để thay
+            for pos in range(len(seq)):
+                if majority[pos] not in GAP_CHARS:
+                    seq[pos] = majority[pos]
+                    break  # chỉ thay đúng 1 ký tự
+
+    return [''.join(seq) for seq in seqs]
+
+
+def write_phylip_safe(file_path, names, seqs):
+    tmp_path = file_path + ".tmp"
+
+    with open(tmp_path, 'w') as f:
+        f.write(f"{len(names)} {len(seqs[0])}\n")
+        for name, seq in zip(names, seqs):
+            f.write(f"{name} {seq}\n")
+
+    os.replace(tmp_path, file_path)  # atomic replace
+
+
+def process_folder_fix_all_gaps_seq(input_folder):
+    for file_path in glob.glob(os.path.join(input_folder, "*.phy")) + glob.glob(os.path.join(input_folder, "*.phyml")):
+        #print(f"Processing: {file_path}")
+
+        names, seqs = read_phylip(file_path)
+        new_seqs = fix_all_gap_sequences(seqs)
+
+        write_phylip_safe(file_path, names, new_seqs)
 
 def normalize(input_file):
     in_file = open(input_file, 'r')
@@ -312,6 +390,7 @@ def do_step4(loop_id):
     cmd = "cp ../step2/Q.step2.4x* ."
     os.system(cmd)
     for i in range(1,n_cat + 1):
+        process_folder_fix_all_gaps_seq(f'out$i')
         cmd = "iqtree2 -seed 1 -st AA -T %d -S out%d  -te tree%d.treefile --model-joint GTR20+FO --init-model Q.step2.4x.%d  --prefix step4.%d " % (
             number_thread,i,i,i,i)
         os.system(cmd)
