@@ -12,11 +12,13 @@ Installation:
 
 Execution:  Estimating a 4-matrix mixture model from a set of alignments can be accomplished by QMix with one command:
 
- python Qmix.py -rate_model rate_model -corr_threshold correlation_threshold -nthread number_threads -ncat number_rate_categories -init_model start_model -data training_alignment_set
+ python Qmix.py -rate_model rate_model -time_model time_model -corr_threshold correlation_threshold -nthread number_threads -ncat number_rate_categories -init_model start_model -data training_alignment_set
 
 Options:
 
 •	rate_model: Type of the mixture site rate model, i.e., M (the gamma distribution) or X (the distribution-free scheme).
+
+•	time_model: Type of the mixture reversible model, i.e., GTR for reversible model or NONREV for non-reversible model.
 
 •	corr_threshold: The Pearson correlation threshold used to stop the model estimation process. The default value is 0.99
 
@@ -31,7 +33,7 @@ Options:
 
   For example: 
   
-  python Qmix.py -rate_model X -corr_threshold 0.99 -nthread 18 -ncat 4 -init_model LG -data data/hssp200
+  python Qmix.py -rate_model X -time_model GTR -corr_threshold 0.99 -nthread 18 -ncat 4 -init_model LG -data data/hssp200
 
 The Qmix program will output four matrices Q.1, Q.2, Q.3, and Q.4 (corresponding to the ‘very slow’, ‘slow’, ‘medium’, and ‘fast’ rate category, respectively) to the same running folder.
 
