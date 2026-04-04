@@ -387,7 +387,7 @@ def do_step4(loop_id):
     cmd = "cp ../step2/Q.step2.4x* ."
     os.system(cmd)
     for i in range(1,n_cat + 1):
-        process_folder_fix_all_gaps_seq(f'out$i')
+        process_folder_fix_all_gaps_seq(f'out{i}')
         cmd = "iqtree2 -seed 1 -st AA -T %d -S out%d  -te tree%d.treefile --model-joint GTR20+FO --init-model Q.step2.4x.%d  --prefix step4.%d " % (
             number_thread,i,i,i,i)
         os.system(cmd)
