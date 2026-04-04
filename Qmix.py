@@ -35,11 +35,10 @@ def read_phylip(file_path):
         seq = ''.join(parts[1:])
         names.append(name)
         seqs.append(seq)
-
+    f.close()
     return names, seqs
 
 def get_column_majority(seqs):
-    """Tính ký tự phổ biến nhất cho từng cột"""
     nsites = len(seqs[0])
     ntaxa = len(seqs)
 
@@ -48,7 +47,6 @@ def get_column_majority(seqs):
     for i in range(nsites):
         column = [seqs[j][i] for j in range(ntaxa)]
         valid = [c for c in column if c not in GAP_CHARS]
-
         if valid:
             most_common = Counter(valid).most_common(1)[0][0]
         else:
@@ -64,13 +62,11 @@ def fix_all_gap_sequences(seqs):
     majority = get_column_majority(seqs)
 
     for i, seq in enumerate(seqs):
-        # kiểm tra sequence toàn gap
         if all(c in GAP_CHARS for c in seq):
-            # tìm vị trí có majority hợp lệ để thay
             for pos in range(len(seq)):
                 if majority[pos] not in GAP_CHARS:
                     seq[pos] = majority[pos]
-                    break  # chỉ thay đúng 1 ký tự
+                    break
 
     return [''.join(seq) for seq in seqs]
 
@@ -82,8 +78,9 @@ def write_phylip_safe(file_path, names, seqs):
         f.write(f"{len(names)} {len(seqs[0])}\n")
         for name, seq in zip(names, seqs):
             f.write(f"{name} {seq}\n")
-
-    os.replace(tmp_path, file_path)  # atomic replace
+    f.close()
+    os.system("rm %s",file_path)
+    os.system("mv %s %s"%(tmp_path, file_path))
 
 
 def process_folder_fix_all_gaps_seq(input_folder):
