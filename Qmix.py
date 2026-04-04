@@ -388,8 +388,8 @@ def do_step4(loop_id):
     os.system(cmd)
     for i in range(1,n_cat + 1):
         process_folder_fix_all_gaps_seq(f'out{i}')
-        cmd = "iqtree2 -seed 1 -st AA -T %d -S out%d  -te tree%d.treefile --model-joint GTR20+FO --init-model Q.step2.4x.%d  --prefix step4.%d " % (
-            number_thread,i,i,i,i)
+        cmd = "iqtree2 -seed 1 -st AA -T %d -S out%d  -te tree%d.treefile --model-joint %s+FO --init-model Q.step2.4x.%d  --prefix step4.%d " % (
+            number_thread,i,i,time_model,i,i)
         os.system(cmd)
         cmd = "grep -A 22 \"can be used as input for IQ-TREE\" step4.%d.iqtree | tail -n21 > Q.step4.4x.%d"%(i,i)
         os.system(cmd)
@@ -472,6 +472,8 @@ def main_run():
 def run(args):
     global site_rate_type
     site_rate_type = args.rate_model
+    global time_model
+    time_model = args.time_model
     global corr_thres
     corr_thres = args.corr_threshold
     global number_thread
@@ -498,6 +500,11 @@ if __name__ == '__main__':
                         type=str,
                         default='X',
                         choices=['M', 'X'])
+
+    parser.add_argument('-time_model',
+                        type=str,
+                        default='GTR',
+                        choices=['GTR', 'NONREV'])
 
     parser.add_argument('-corr_threshold',
                         type=str,
