@@ -18,7 +18,7 @@ Options:
 
 •	rate_model: Type of the mixture site rate model, i.e., M (the gamma distribution) or X (the distribution-free scheme).
 
-•	time_model: Type of the mixture reversible model, i.e., GTR for reversible model or NONREV for non-reversible model.
+•	time_model: Type of the mixture reversible model, i.e., GTR20 for reversible model or NONREV for non-reversible model.
 
 •	corr_threshold: The Pearson correlation threshold used to stop the model estimation process. The default value is 0.99
 
@@ -33,7 +33,7 @@ Options:
 
   For example: 
   
-  python Qmix.py -rate_model X -time_model GTR -corr_threshold 0.99 -nthread 18 -ncat 4 -init_model LG -data data/hssp200
+  python Qmix.py -rate_model X -time_model GTR20 -corr_threshold 0.99 -nthread 18 -ncat 4 -init_model LG -data data/hssp200
 
 The Qmix program will output four matrices Q.1, Q.2, Q.3, and Q.4 (corresponding to the ‘very slow’, ‘slow’, ‘medium’, and ‘fast’ rate category, respectively) to the same running folder.
 
