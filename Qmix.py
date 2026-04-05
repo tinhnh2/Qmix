@@ -79,7 +79,7 @@ def write_phylip_safe(file_path, names, seqs):
         for name, seq in zip(names, seqs):
             f.write(f"{name} {seq}\n")
     f.close()
-    os.system("rm %s",file_path)
+    os.system("rm %s"%file_path)
     os.system("mv %s %s"%(tmp_path, file_path))
 
 
@@ -503,8 +503,8 @@ if __name__ == '__main__':
 
     parser.add_argument('-time_model',
                         type=str,
-                        default='GTR',
-                        choices=['GTR', 'NONREV'])
+                        default='GTR20',
+                        choices=['GTR20', 'NONREV'])
 
     parser.add_argument('-corr_threshold',
                         type=str,
