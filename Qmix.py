@@ -155,7 +155,7 @@ def run_step2(folder, loop_id):
     mix_str = ""
     for i in range(1, n_cat+1):
         mix_str += "Q.step2.4x.%d," % i
-    if site_rate_type == "4X" or site_rate_type == "4x":
+    if site_rate_type == "X" or site_rate_type == "x":
         for aln_file in glob.glob(r"data/*.phy") + glob.glob("data/*.phyml"):
             aln_name = aln_file.split('/')[1]
             cmd = "iqtree2 -seed 1 -T %d -s %s --prefix %s -m \"MIX{%s}*R%d\" --no-seq-comp -wslmr" % (
