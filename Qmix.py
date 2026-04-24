@@ -17,6 +17,7 @@ corr_thres = 0.95
 number_thread = 8
 start_matrix = "LG"
 n_cat = 4
+max_loop = 10
 
 GAP_CHARS = set(['-', '?', 'X', '.'])
 
@@ -426,6 +427,7 @@ def main_run():
     print("Data path: %s" % data_path)
     loop_id = 1
     exit_loop = 0
+    global max_loop
     while exit_loop == 0:
         global count_zero
         count_zero = 0
@@ -442,7 +444,7 @@ def main_run():
             if element < float(corr_thres):
                 check_corr = True
                 break
-        if check_corr == True:
+        if check_corr == True or loop_id < max_loop:
             cmd = "cp -rf loop%d loop%d" % (loop_id, loop_id+1)
             os.system(cmd)
             cmd = "cp -rf loop%d/step2/data loop%d/step4/"%(loop_id + 1, loop_id + 1)
@@ -484,8 +486,10 @@ def run(args):
     n_cat = int(args.ncat)
     global data_path
     data_path = args.data
-    print("Type of rate model: %s, corr_threshold: %s, number of theads: %d, number of rate categories: %d, init model: %s, data_path: %s" %
-          (site_rate_type, corr_thres, number_thread, n_cat, start_matrix, data_path))
+    global max_loop
+    max_loop = int(args.max_loop)
+    print("Type of rate model: %s, corr_threshold: %s, number of theads: %d, number of rate categories: %d, max_loop: %d, init model: %s, data_path: %s" %
+          (site_rate_type, corr_thres, number_thread, n_cat, max_loop, start_matrix, data_path))
     if n_cat < 2:
         print("WARNING: A mixture model requires at least two categories.")
     else:
@@ -524,6 +528,10 @@ if __name__ == '__main__':
                         type=str,
                         default='4',
                         help='The number of gamma rate category')
+    parser.add_argument('-max_loop',
+                        type=str,
+                        default='10',
+                        help='The maximum number of estimation loop')
     parser.add_argument('-data',
                         type=str,
                         default='',
