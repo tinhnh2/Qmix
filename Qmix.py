@@ -444,7 +444,7 @@ def main_run():
             if element < float(corr_thres):
                 check_corr = True
                 break
-        if check_corr == True or loop_id < max_loop:
+        if check_corr == True and loop_id < max_loop:
             cmd = "cp -rf loop%d loop%d" % (loop_id, loop_id+1)
             os.system(cmd)
             cmd = "cp -rf loop%d/step2/data loop%d/step4/"%(loop_id + 1, loop_id + 1)
