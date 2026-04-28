@@ -464,10 +464,15 @@ def main_run():
             loop_id = loop_id + 1
         else:
             exit_loop = 1
+            global time_model
             for i in range(1,n_cat + 1):
-                normalize("loop%d/step4/Q.step4.4x.%d" % (loop_id,i))
-                cmd = "cp loop%d/step4/Q.step4.4x.%d.normalized Q.%d" % (loop_id,i,i)
-                os.system(cmd)
+                if time_model == "GTR20":
+                    normalize("loop%d/step4/Q.step4.4x.%d" % (loop_id,i))
+                    cmd = "cp loop%d/step4/Q.step4.4x.%d.normalized Q.%d" % (loop_id,i,i)
+                    os.system(cmd)
+                else:
+                    cmd = "cp loop%d/step4/Q.step4.4x.%d Q.%d" % (loop_id,i,i)
+                    os.system(cmd)
             print("Finish process")
 
 
